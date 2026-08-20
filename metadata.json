@@ -1,0 +1,6 @@
+{
+  "name": "主流 AI 技術全景導覽",
+  "description": "提供主流 AI 技術架構、功能標籤過濾、深度解析與互動式學習的專業導覽平台",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

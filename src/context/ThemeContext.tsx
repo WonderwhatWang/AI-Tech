@@ -12,21 +12,36 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setThemeState] = useState<Theme>(() => {
-    const saved = localStorage.getItem('ai_radar_theme');
-    if (saved === 'light' || saved === 'dark') {
-      return saved;
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        const saved = localStorage.getItem('ai_radar_theme');
+        if (saved === 'light' || saved === 'dark') {
+          return saved;
+        }
+      }
+      if (typeof window !== 'undefined' && window.matchMedia) {
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+    } catch {
+      // Fallback if storage access is denied
     }
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    return 'dark';
   });
 
   useEffect(() => {
-    const root = document.documentElement;
-    if (theme === 'dark') {
-      root.classList.add('dark');
-    } else {
-      root.classList.remove('dark');
+    try {
+      const root = document.documentElement;
+      if (theme === 'dark') {
+        root.classList.add('dark');
+      } else {
+        root.classList.remove('dark');
+      }
+      if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.setItem('ai_radar_theme', theme);
+      }
+    } catch {
+      // Ignore storage errors
     }
-    localStorage.setItem('ai_radar_theme', theme);
   }, [theme]);
 
   const toggleTheme = () => {

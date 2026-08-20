@@ -36,7 +36,13 @@ export function AppContent() {
   });
 
   useEffect(() => {
-    localStorage.setItem('ai_radar_bookmarks', JSON.stringify(bookmarkedIds));
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        localStorage.setItem('ai_radar_bookmarks', JSON.stringify(bookmarkedIds));
+      }
+    } catch {
+      // Ignore storage errors
+    }
   }, [bookmarkedIds]);
 
   // Comparison items
